@@ -1,70 +1,36 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title') | Tasks for Today</title>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <style>
-        * { box-sizing: border-box; }
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f3f6fb;
-            color: #1e293b;
-        }
-        header {
-            background: #1e3a5f;
-            color: white;
-            padding: 20px;
-        }
-        header div, main {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-        header h1 { margin: 0 0 15px; font-size: 24px; }
-        nav { display: flex; gap: 18px; flex-wrap: wrap; }
-        nav a { color: white; text-decoration: none; }
-        nav a:hover { text-decoration: underline; }
-        main {
-            background: white;
-            margin: 30px auto;
-            padding: 25px;
-            border-radius: 10px;
-        }
-        h2 { margin-top: 0; }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        th, td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid #dbe3ed;
-        }
-        th { background: #eaf0f8; }
-        .table-wrap { overflow-x: auto; }
-        .muted { color: #526276; }
-        @media (max-width: 940px) {
-            main { margin: 20px 15px; }
-        }
-    </style>
-</head>
-<body>
-    <header>
-        <div>
-            <h1>Tasks for Today</h1>
-            <nav>
-                <a href="{{ route('welcome') }}">Welcome</a>
-                <a href="{{ route('tasks') }}">Task List</a>
-                <a href="{{ route('profile') }}">Profile</a>
-                <a href="{{ route('about') }}">About</a>
-            </nav>
+        <title>{{ config('app.name', 'Laravel') }}</title>
+
+        <!-- Fonts -->
+        <link rel="preconnect" href="https://fonts.bunny.net">
+        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+
+        <!-- Scripts -->
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
+    </head>
+    <body class="font-sans antialiased">
+        <div class="min-h-screen bg-gray-100">
+            @include('layouts.navigation')
+
+            <!-- Page Heading -->
+            @isset($header)
+                <header class="bg-white shadow">
+                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                        {{ $header }}
+                    </div>
+                </header>
+            @endisset
+
+            <!-- Page Content -->
+            <main>
+                {{ $slot }}
+            </main>
         </div>
-    </header>
-
-    <main>
-        @yield('content')
-    </main>
-</body>
+    </body>
 </html>

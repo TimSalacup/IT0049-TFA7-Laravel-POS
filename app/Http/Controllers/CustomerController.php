@@ -7,5 +7,7 @@ class CustomerController extends Controller {
  public function store(Request $request){ Customer::create($this->validated($request)); return redirect()->route('customers.index')->with('success','Customer added.'); }
  public function edit(Customer $customer){ return view('customers.form',compact('customer')); }
  public function update(Request $request,Customer $customer){ $customer->update($this->validated($request)); return redirect()->route('customers.index')->with('success','Customer updated.'); }
+ public function show(Customer $customer){ return view('customers.show',compact('customer')); }
+ public function destroy(Customer $customer){ $customer->delete(); return redirect()->route('customers.index')->with('success','Customer deleted.'); }
  private function validated(Request $request): array { return $request->validate(['full_name'=>'required|string|max:255','email'=>'required|email|max:255','phone'=>'nullable|string|max:30']); }
 }

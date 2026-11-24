@@ -15,6 +15,7 @@ class PosAccountsTest extends TestCase
 
     public function test_customer_validation_and_edit(): void
     {
+        $this->actingAs(User::create(['username'=>'tester','full_name'=>'Test User']));
         $this->post('/customers', ['full_name' => '', 'email' => 'bad'])->assertSessionHasErrors(['full_name', 'email']);
         $this->post('/customers', ['full_name' => 'Ana', 'email' => 'ana@example.com'])->assertRedirect('/customers');
         $customer = Customer::firstOrFail();
@@ -26,6 +27,7 @@ class PosAccountsTest extends TestCase
     public function test_username_validation_and_avatar_replacement(): void
     {
         Storage::fake('public');
+        $this->actingAs(User::create(['username'=>'tester','full_name'=>'Test User']));
         $this->post('/users', ['username' => 'ana', 'full_name' => 'Ana'])->assertRedirect('/users');
         $user = User::where('username', 'ana')->firstOrFail();
         $this->post('/users', ['username' => 'ana', 'full_name' => 'Other'])->assertSessionHasErrors('username');

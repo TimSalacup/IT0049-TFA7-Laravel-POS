@@ -6,6 +6,8 @@ class UserController extends Controller {
  public function index(){ return view('users.index',['users'=>User::orderBy('username')->get()]); }
  public function create(){ return view('users.form',['user'=>new User]); }
  public function store(Request $request){ $data=$request->validate(['username'=>['required','string','max:255',Rule::unique('users')], 'full_name'=>'required|string|max:255']); User::create($data); return redirect()->route('users.index')->with('success','User added.'); }
+ public function show(User $user){ return view('users.show',compact('user')); }
+ public function destroy(Request $request, User $user){ if($request->user()->is($user)) return back()->withErrors(['user'=>'You cannot delete your own account.']); $avatar=$user->avatar; $user->delete(); if($avatar) Storage::disk('public')->delete($avatar); return redirect()->route('users.index')->with('success','User deleted.'); }
  public function edit(User $user){ return view('users.form',compact('user')); }
  public function update(Request $request, User $user){
   $data=$request->validate(['username'=>['required','string','max:255',Rule::unique('users')->ignore($user)], 'full_name'=>'required|string|max:255','avatar'=>'nullable|image|mimes:jpg,jpeg,png,webp|max:2048']);
